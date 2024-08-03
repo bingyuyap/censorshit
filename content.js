@@ -1,9 +1,9 @@
-let filterCriteria = "";
+let filterCriteria = [];
 
 function initializeExtension() {
   chrome.runtime.sendMessage({ action: "getFilterCriteria" }, (response) => {
     if (chrome.runtime.lastError) return;
-    if (response) {
+    if (response && Array.isArray(response)) {
       filterCriteria = response;
       observeTweets();
     }
@@ -26,19 +26,28 @@ function observeTweets() {
 }
 
 function analyzeTweet(tweetElement) {
-  const tweetText = tweetElement.querySelector('div[data-testid="tweetText"]')?.textContent || "";
-  
-  chrome.runtime.sendMessage(
-    { action: "analyzeTweet", tweetText, filterCriteria },
-    (response) => {
-      if (chrome.runtime.lastError) return;
-      if (response.error) return;
-      if (response.shouldFilter) {
-        hideTweet(tweetElement);
-        console.log("Post removed:", tweetText)
+  const tweetText =
+    tweetElement.querySelector('div[data-testid="tweetText"]')?.textContent ||
+    "";
+
+  filterCriteria.forEach((criteria) => {
+    chrome.runtime.sendMessage(
+      { action: "analyzeTweet", tweetText, filterCriteria: criteria },
+      (response) => {
+        if (chrome.runtime.lastError) return;
+        if (response.error) return;
+        if (response.shouldFilter) {
+          hideTweet(tweetElement);
+          console.log(
+            "Post removed:",
+            tweetText,
+            "Matched criteria:",
+            criteria
+          );
+        }
       }
-    }
-  );
+    );
+  });
 }
 
 function hideTweet(tweetElement) {

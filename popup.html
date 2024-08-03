@@ -4,14 +4,27 @@
   <title>Censorshit</title>
   <style>
     body { width: 300px; padding: 10px; font-family: Arial, sans-serif; }
-    textarea { width: 100%; height: 100px; margin-bottom: 10px; }
-    button { width: 100%; }
+    #filterContainer { margin-bottom: 10px; }
+    .filter-group {
+      display: flex;
+      margin-bottom: 5px;
+    }
+    .filter-input {
+      flex-grow: 1;
+      margin-right: 5px;
+    }
+    .delete-filter {
+      width: auto;
+      padding: 0 5px;
+    }
+    button { width: 100%; margin-bottom: 5px; }
   </style>
 </head>
 <body>
   <h2>Censorshit</h2>
   <p>What is slop to you:</p>
-  <textarea id="filterCriteria"></textarea>
+  <div id="filterContainer"></div>
+  <button id="addFilterButton">Add Filter</button>
   <button id="saveButton">Save Filters</button>
   <script src="popup.js"></script>
 </body>
