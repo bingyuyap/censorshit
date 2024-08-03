@@ -1,6 +1,12 @@
 # CensorShit: Tweet Filtering Chrome Extension
 CensorShit is a Chrome extension that filters tweets based on user-defined criteria using a local Ollama instance with the llama3.1 model. Hopefully this removes the slop from your timeline.
 
+## Features
+
+- Removes X posts that fit the criteria described
+- Supports multiple criterias
+- Auto-mutes user after n number of posts are removed
+
 ## Prerequisites
 
 - Chrome browser
