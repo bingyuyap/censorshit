@@ -2,15 +2,9 @@
   "manifest_version": 3,
   "name": "CensorShit",
   "version": "1.0",
-  "description": "Filters tweets using local Ollama instance",
-  "permissions": [
-    "storage",
-    "activeTab",
-    "tabs"
-  ],
-  "host_permissions": [
-    "http://localhost:11434/*"
-  ],
+  "description": "Filters tweets using local Ollama instance with auto-mute feature",
+  "permissions": ["storage", "activeTab", "tabs"],
+  "host_permissions": ["http://localhost:11434/*"],
   "background": {
     "service_worker": "background.js"
   },
@@ -22,5 +16,19 @@
   ],
   "action": {
     "default_popup": "popup.html"
+  },
+  "commands": {
+    "remove_post": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+X"
+      },
+      "description": "Remove current post"
+    },
+    "toggle_mute": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+M"
+      },
+      "description": "Toggle mute for current user"
+    }
   }
 }

@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const filterContainer = document.getElementById("filterContainer");
   const addFilterButton = document.getElementById("addFilterButton");
   const saveButton = document.getElementById("saveButton");
+  const muteThresholdInput = document.getElementById("muteThreshold");
 
   // Load existing filters
   chrome.runtime.sendMessage({ action: "getFilterCriteria" }, (response) => {
@@ -12,25 +13,37 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // Load existing mute threshold
+  chrome.storage.sync.get("muteThreshold", (result) => {
+    if (result.muteThreshold) {
+      muteThresholdInput.value = result.muteThreshold;
+    }
+  });
+
   // Add new filter input
   addFilterButton.addEventListener("click", () => {
     createFilterInput();
   });
 
-  // Save filters
+  // Update the save button click handler
   saveButton.addEventListener("click", () => {
     const filterInputs = document.querySelectorAll(".filter-input");
     const filterCriteria = Array.from(filterInputs)
       .map((input) => input.value.trim())
       .filter(Boolean);
+    const muteThreshold = parseInt(muteThresholdInput.value, 10);
 
-    chrome.runtime.sendMessage(
-      { action: "updateFilterCriteria", filterCriteria },
-      (response) => {
-        if (response && response.success) {
-          alert("Filter criteria saved successfully!");
+    chrome.storage.sync.set(
+      {
+        filterCriteria: filterCriteria,
+        muteThreshold: muteThreshold,
+      },
+      () => {
+        if (chrome.runtime.lastError) {
+          console.error(chrome.runtime.lastError);
+          alert("Error saving settings. Please try again.");
         } else {
-          alert("Error saving filter criteria. Please try again.");
+          alert("Settings saved successfully!");
         }
       }
     );
