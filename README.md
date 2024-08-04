@@ -6,6 +6,7 @@ CensorShit is a Chrome extension that filters tweets based on user-defined crite
 - Removes X posts that fit the criteria described
 - Supports multiple criterias
 - Auto-mutes user after n number of posts are removed
+- Supports muting multiple images using perpetual hashing
 
 ## Prerequisites
 
