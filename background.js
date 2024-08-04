@@ -1,3 +1,5 @@
+let referenceImageHashes = [];
+
 function getFilterCriteria() {
   return new Promise((resolve) => {
     chrome.storage.sync.get("filterCriteria", (result) => {
@@ -71,9 +73,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             return;
           }
 
-          console.log("userId", counts[userId]);
           if (counts[userId] == muteThreshold) {
-            console.log("user exceeded mute threshold", muteThreshold);
             chrome.tabs.sendMessage(sender.tab.id, {
               action: "muteUser",
               userId: userId,
@@ -85,6 +85,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       }
     );
     return true; // Indicates asynchronous response
+  } else if (request.action === "setReferenceHashes") {
+    referenceImageHashes = request.hashes;
+    chrome.storage.sync.set({ referenceHashes: referenceImageHashes }, () => {
+      sendResponse({ status: "Hashes updated and saved" });
+    });
+    return true; // Indicates an asynchronous response
+  } else if (request.action === "getReferenceHashes") {
+    sendResponse({ hashes: referenceImageHashes });
+    return true;
   }
 });
 

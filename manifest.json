@@ -3,14 +3,18 @@
   "name": "CensorShit",
   "version": "1.0",
   "description": "Filters tweets using local Ollama instance with auto-mute feature",
-  "permissions": ["storage", "activeTab", "tabs"],
+  "permissions": ["storage", "activeTab", "tabs", "clipboardRead"],
   "host_permissions": ["http://localhost:11434/*"],
   "background": {
     "service_worker": "background.js"
   },
   "content_scripts": [
     {
-      "matches": ["https://twitter.com/*", "https://x.com/*"],
+      "matches": [
+        "https://twitter.com/*",
+        "https://x.com/*",
+        "https://pbs.twimg.com/*"
+      ],
       "js": ["content.js"]
     }
   ],
